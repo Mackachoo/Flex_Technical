@@ -14,6 +14,9 @@ async def get_dashboard_summary(
     tenant_id = getattr(current_user, "tenant_id", "default_tenant") or "default_tenant"
     
     revenue_data = await get_revenue_summary(property_id, tenant_id)
+
+    if 'error' in revenue_data:
+        raise HTTPException(status_code=503, detail=revenue_data['error'])
     
     total_revenue_float = float(revenue_data['total'])
     
